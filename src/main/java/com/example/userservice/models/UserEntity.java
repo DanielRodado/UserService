@@ -8,10 +8,10 @@ public class UserEntity {
 
     @Id
     private Long id;
-    private String username, email, password;
+    private String name, email, password;
 
-    public UserEntity(String username, String email, String password) {
-        this.username = username;
+    public UserEntity(String name, String email, String password) {
+        this.name = name;
         this.email = email;
         this.password = password;
     }
@@ -20,12 +20,12 @@ public class UserEntity {
         return id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {

@@ -51,25 +51,17 @@ public class UserEntityServiceImpl implements UserEntityService {
     // Methods Controller
 
     @Override
-    public Mono<UserEntity> create(Mono<UserApplicationDTO> userAppMono) {
-        return toUserEntityMono(userAppMono).flatMap(this::save);
+    public Mono<UserEntityDTO> create(Mono<UserApplicationDTO> userAppMono) {
+        return toUserEntityMono(userAppMono).flatMap(userEntity -> save(userEntity).flatMap(userEntitySaved -> toUserEntityDTOMono(Mono.just(userEntitySaved))));
     }
 
     @Override
-    public Mono<UserEntity> update(Mono<UserApplicationDTO> userAppMono, Long id) {
+    public Mono<UserEntityDTO> update(UserApplicationDTO userApp, Long id) {
         return findById(id).flatMap(userEntity -> {
-            updateProperties(userAppMono, userEntity);
-            return save(userEntity);
-        });
-    }
-
-    @Override
-    public Mono<Void> updateProperties(Mono<UserApplicationDTO> userAppMono, UserEntity userEntity) {
-        return userAppMono.flatMap(userAppMonoParam -> {
-            userEntity.setName(userAppMonoParam.name());
-            userEntity.setEmail(userAppMonoParam.email());
-            userEntity.setPassword(userAppMonoParam.password());
-            return Mono.empty();
+            userEntity.setName(userApp.name());
+            userEntity.setEmail(userApp.email());
+            userEntity.setPassword(userApp.password());
+            return save(userEntity).then(toUserEntityDTOMono(Mono.just(userEntity)));
         });
     }
 

@@ -24,11 +24,9 @@ public interface UserEntityService {
 
     // Methods Controller
 
-    Mono<UserEntity> create(Mono<UserApplicationDTO> userAppMono);
+    Mono<UserEntityDTO> create(Mono<UserApplicationDTO> userAppMono);
 
-    Mono<UserEntity> update(Mono<UserApplicationDTO> userAppMono, Long id);
-
-    Mono<Void> updateProperties(Mono<UserApplicationDTO> userAppMono, UserEntity userEntity);
+    Mono<UserEntityDTO> update(UserApplicationDTO userApp, Long id);
 
     Mono<Void> deleteById(Long id);
 

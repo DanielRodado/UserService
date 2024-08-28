@@ -9,6 +9,11 @@ import reactor.core.publisher.Mono;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(InvalidUserException.class)
+    public Mono<ResponseEntity<String>> handleInvalidUserException(InvalidUserException e) {
+        return Mono.just(new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN));
+    }
+
     @ExceptionHandler(UserNotFoundException.class)
     public Mono<ResponseEntity<String>> handleUserNotFoundException(UserNotFoundException e) {
         return Mono.just(new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND));

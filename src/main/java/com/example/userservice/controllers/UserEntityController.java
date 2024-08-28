@@ -2,13 +2,19 @@ package com.example.userservice.controllers;
 
 import com.example.userservice.dto.UserApplicationDTO;
 import com.example.userservice.dto.UserEntityDTO;
+import com.example.userservice.exceptions.InvalidUserException;
 import com.example.userservice.service.UserEntityService;
+import com.example.userservice.validations.UserEntityValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import static com.example.userservice.mappers.UserEntityMapper.toUserEntity;
 
 @RestController
 @RequestMapping("/api/users")
@@ -16,6 +22,9 @@ public class UserEntityController {
 
     @Autowired
     private UserEntityService userEntityService;
+
+    @Autowired
+    private UserEntityValidator userEntityValidator;
 
     @GetMapping("/{id}")
     public Mono<UserEntityDTO> getUserById(@PathVariable Long id) {
@@ -30,7 +39,16 @@ public class UserEntityController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<UserEntityDTO> createUser(@RequestBody Mono<UserApplicationDTO> userAppMono) {
-        return userEntityService.create(userAppMono);
+        return userAppMono.flatMap(userApplicationDTO -> {
+            Errors errors = new BeanPropertyBindingResult(toUserEntity(userApplicationDTO), "user");
+            userEntityValidator.validate(toUserEntity(userApplicationDTO), errors);
+
+            if (errors.hasErrors()) {
+                return Mono.error(new InvalidUserException(errors.getFieldError().getDefaultMessage()));
+            }
+
+            return userEntityService.create(userAppMono);
+        });
     }
 
     @PutMapping("/{id}")

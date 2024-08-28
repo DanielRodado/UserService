@@ -28,6 +28,8 @@ public interface UserEntityService {
 
     Mono<UserEntityDTO> update(UserApplicationDTO userApp, Long id);
 
+    Mono<UserEntity> setProperties(UserEntity userEntity, UserApplicationDTO userApp);
+
     Mono<Void> deleteById(Long id);
 
     // Validations

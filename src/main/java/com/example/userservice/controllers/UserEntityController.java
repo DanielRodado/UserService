@@ -4,6 +4,7 @@ import com.example.userservice.dto.UserApplicationDTO;
 import com.example.userservice.dto.UserEntityDTO;
 import com.example.userservice.service.UserEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -27,6 +28,7 @@ public class UserEntityController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Mono<UserEntityDTO> createUser(@RequestBody Mono<UserApplicationDTO> userAppMono) {
         return userEntityService.create(userAppMono);
     }

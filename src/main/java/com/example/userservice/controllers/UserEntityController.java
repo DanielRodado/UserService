@@ -23,9 +23,6 @@ public class UserEntityController {
     @Autowired
     private UserEntityService userEntityService;
 
-    @Autowired
-    private UserEntityValidator userEntityValidator;
-
     @GetMapping("/{id}")
     public Mono<UserEntityDTO> getUserById(@PathVariable Long id) {
         return userEntityService.findByIdDTO(id);
@@ -39,16 +36,7 @@ public class UserEntityController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<UserEntityDTO> createUser(@RequestBody Mono<UserApplicationDTO> userAppMono) {
-        return userAppMono.flatMap(userApplicationDTO -> {
-            Errors errors = new BeanPropertyBindingResult(toUserEntity(userApplicationDTO), "user");
-            userEntityValidator.validate(toUserEntity(userApplicationDTO), errors);
-
-            if (errors.hasErrors()) {
-                return Mono.error(new InvalidUserException(errors.getFieldError().getDefaultMessage()));
-            }
-
-            return userEntityService.create(userAppMono);
-        });
+        return userEntityService.create(userAppMono);
     }
 
     @PutMapping("/{id}")

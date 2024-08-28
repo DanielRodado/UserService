@@ -1,5 +1,6 @@
 package com.example.userservice.validations;
 
+import com.example.userservice.dto.UserApplicationDTO;
 import com.example.userservice.models.UserEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -14,11 +15,11 @@ public class UserEntityValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
-        UserEntity userEntity = (UserEntity) target;
+        UserApplicationDTO userApp = (UserApplicationDTO) target;
 
-        isValidName(userEntity.getName(), errors);
-        isValidEmail(userEntity.getEmail(), errors);
-        isValidPassword(userEntity.getPassword(), errors);
+        isValidName(userApp.name(), errors);
+        isValidEmail(userApp.email(), errors);
+        isValidPassword(userApp.password(), errors);
     }
 
     public void isValidName(String name, Errors errors) {

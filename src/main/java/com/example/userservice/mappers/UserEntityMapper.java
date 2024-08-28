@@ -10,6 +10,10 @@ public class UserEntityMapper {
 
     // To DTO
 
+    public static UserEntityDTO toUserEntityDTO(UserEntity userEntity) {
+        return new UserEntityDTO(userEntity);
+    }
+
     public static Mono<UserEntityDTO> toUserEntityDTOMono(Mono<UserEntity> userEntityMono) {
         return userEntityMono.map(UserEntityDTO::new);
     }

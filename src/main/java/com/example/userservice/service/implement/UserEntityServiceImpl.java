@@ -2,12 +2,17 @@ package com.example.userservice.service.implement;
 
 import com.example.userservice.dto.UserApplicationDTO;
 import com.example.userservice.dto.UserEntityDTO;
+import com.example.userservice.exceptions.InvalidUserException;
 import com.example.userservice.exceptions.UserNotFoundException;
+import com.example.userservice.mappers.UserEntityMapper;
 import com.example.userservice.models.UserEntity;
 import com.example.userservice.repositories.UserEntityRepository;
 import com.example.userservice.service.UserEntityService;
+import com.example.userservice.validations.UserEntityValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.Errors;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -16,10 +21,13 @@ import static com.example.userservice.mappers.UserEntityMapper.*;
 @Service
 public class UserEntityServiceImpl implements UserEntityService {
 
-    // Methods Repository
-
     @Autowired
     private UserEntityRepository userEntityRepository;
+
+    @Autowired
+    private UserEntityValidator userEntityValidator;
+
+    // Methods Repository
 
     @Override
     public Mono<UserEntity> findById(Long id) {
@@ -52,7 +60,10 @@ public class UserEntityServiceImpl implements UserEntityService {
 
     @Override
     public Mono<UserEntityDTO> create(Mono<UserApplicationDTO> userAppMono) {
-        return toUserEntityMono(userAppMono).flatMap(userEntity -> save(userEntity).flatMap(userEntitySaved -> toUserEntityDTOMono(Mono.just(userEntitySaved))));
+        return userAppMono
+                .flatMap(this::validate)
+                .flatMap(userApplicationDTO -> save(toUserEntity(userApplicationDTO)))
+                .map(UserEntityMapper::toUserEntityDTO);
     }
 
     @Override
@@ -68,5 +79,19 @@ public class UserEntityServiceImpl implements UserEntityService {
     @Override
     public Mono<Void> deleteById(Long id) {
         return findById(id).flatMap(userEntityRepository::delete);
+    }
+
+    // Validation
+
+    @Override
+    public Mono<UserApplicationDTO> validate(UserApplicationDTO userApp) {
+        Errors errors = new BeanPropertyBindingResult(userApp, "user");
+        userEntityValidator.validate(userApp, errors);
+
+        if (errors.hasErrors()) {
+            return Mono.error(new InvalidUserException(errors.getFieldError().getDefaultMessage()));
+        }
+
+        return Mono.just(userApp);
     }
 }

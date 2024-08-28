@@ -30,4 +30,8 @@ public interface UserEntityService {
 
     Mono<Void> deleteById(Long id);
 
+    // Validations
+
+    Mono<UserApplicationDTO> validate(UserApplicationDTO userApp);
+
 }

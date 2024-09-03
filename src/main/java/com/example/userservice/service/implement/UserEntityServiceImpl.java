@@ -30,48 +30,48 @@ public class UserEntityServiceImpl implements UserEntityService {
     // Methods Repository
 
     @Override
-    public Mono<UserEntity> findById(Long id) {
+    public Mono<UserEntity> getUserById(Long id) {
         return userEntityRepository.findById(id).switchIfEmpty(Mono.error(new UserNotFoundException(id)));
     }
 
     @Override
-    public Flux<UserEntity> findAll() {
+    public Flux<UserEntity> findAllUsers() {
         return userEntityRepository.findAll();
     }
 
     @Override
-    public Mono<UserEntity> save(UserEntity userEntity) {
+    public Mono<UserEntity> saveUser(UserEntity userEntity) {
         return userEntityRepository.save(userEntity);
     }
 
     // Repository methods returning a DTO
 
     @Override
-    public Mono<UserEntityDTO> findByIdDTO(Long id) {
-        return toUserEntityDTOMono(findById(id));
+    public Mono<UserEntityDTO> getUserDTOById(Long id) {
+        return toUserEntityDTOMono(getUserById(id));
     }
 
     @Override
-    public Flux<UserEntityDTO> findAllDTO() {
-        return toUserEntityDTOFlux(findAll());
+    public Flux<UserEntityDTO> findAllUsersDTO() {
+        return toUserEntityDTOFlux(findAllUsers());
     }
 
     // Methods Controller
 
     @Override
-    public Mono<UserEntityDTO> create(Mono<UserApplicationDTO> userAppMono) {
+    public Mono<UserEntityDTO> createUser(Mono<UserApplicationDTO> userAppMono) {
         return userAppMono
                 .flatMap(this::validate)
-                .flatMap(userApplicationDTO -> save(toUserEntity(userApplicationDTO)))
+                .flatMap(userApplicationDTO -> saveUser(toUserEntity(userApplicationDTO)))
                 .map(UserEntityMapper::toUserEntityDTO);
     }
 
     @Override
-    public Mono<UserEntityDTO> update(UserApplicationDTO userApp, Long id) {
+    public Mono<UserEntityDTO> updateUser(UserApplicationDTO userApp, Long id) {
         return validate(userApp)
-                .then(findById(id))
+                .then(getUserById(id))
                 .flatMap(userEntity -> setProperties(userEntity, userApp))
-                .flatMap(this::save)
+                .flatMap(this::saveUser)
                 .map(UserEntityMapper::toUserEntityDTO);
     }
 
@@ -84,8 +84,8 @@ public class UserEntityServiceImpl implements UserEntityService {
     }
 
     @Override
-    public Mono<Void> deleteById(Long id) {
-        return findById(id).flatMap(userEntityRepository::delete);
+    public Mono<Void> deleteUserById(Long id) {
+        return getUserById(id).flatMap(userEntityRepository::delete);
     }
 
     // Validation

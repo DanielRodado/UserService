@@ -50,7 +50,7 @@ public class UserEntityController {
     })
     @GetMapping("/{id}")
     public Mono<UserEntityDTO> getUserById(@PathVariable Long id) {
-        return userEntityService.findByIdDTO(id);
+        return userEntityService.getUserDTOById(id);
     }
 
     @Operation( summary = "Retrieve all users", description = "Fetches a set of all users.")
@@ -61,7 +61,7 @@ public class UserEntityController {
     )
     @GetMapping
     public Flux<UserEntityDTO> getAllUsers() {
-        return userEntityService.findAllDTO();
+        return userEntityService.findAllUsersDTO();
     }
 
     @Operation(
@@ -105,7 +105,7 @@ public class UserEntityController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<UserEntityDTO> createUser(@RequestBody Mono<UserApplicationDTO> userAppMono) {
-        return userEntityService.create(userAppMono);
+        return userEntityService.createUser(userAppMono);
     }
 
     @Operation(
@@ -159,7 +159,7 @@ public class UserEntityController {
     })
     @PutMapping("/{id}")
     public Mono<UserEntityDTO> updateUser(@PathVariable Long id, @RequestBody UserApplicationDTO userApp) {
-        return userEntityService.update(userApp, id);
+        return userEntityService.updateUser(userApp, id);
     }
 
     @Operation(
@@ -184,7 +184,7 @@ public class UserEntityController {
     })
     @DeleteMapping("/{id}")
     public Mono<ResponseEntity<String>> deleteUser(@PathVariable Long id) {
-        return userEntityService.deleteById(id).then(Mono.just(ResponseEntity.noContent().build()));
+        return userEntityService.deleteUserById(id).then(Mono.just(ResponseEntity.noContent().build()));
     }
 
 }

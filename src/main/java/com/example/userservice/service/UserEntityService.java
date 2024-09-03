@@ -10,27 +10,27 @@ public interface UserEntityService {
 
     // Methods Repository
 
-    Mono<UserEntity> findById(Long id);
+    Mono<UserEntity> getUserById(Long id);
 
-    Flux<UserEntity> findAll();
+    Flux<UserEntity> findAllUsers();
 
-    Mono<UserEntity> save(UserEntity userEntity);
+    Mono<UserEntity> saveUser(UserEntity userEntity);
 
     // Repository methods returning a DTO
 
-    Mono<UserEntityDTO> findByIdDTO(Long id);
+    Mono<UserEntityDTO> getUserDTOById(Long id);
 
-    Flux<UserEntityDTO> findAllDTO();
+    Flux<UserEntityDTO> findAllUsersDTO();
 
     // Methods Controller
 
-    Mono<UserEntityDTO> create(Mono<UserApplicationDTO> userAppMono);
+    Mono<UserEntityDTO> createUser(Mono<UserApplicationDTO> userAppMono);
 
-    Mono<UserEntityDTO> update(UserApplicationDTO userApp, Long id);
+    Mono<UserEntityDTO> updateUser(UserApplicationDTO userApp, Long id);
 
     Mono<UserEntity> setProperties(UserEntity userEntity, UserApplicationDTO userApp);
 
-    Mono<Void> deleteById(Long id);
+    Mono<Void> deleteUserById(Long id);
 
     // Validations
 

@@ -28,7 +28,7 @@ public class UserEntityController {
 
     @Operation(
             summary = "Retrieve User by ID",
-            description = "Fetches the User details for the given task ID.",
+            description = "Fetches the User details for the given user ID.",
             parameters = @Parameter(
                     name = "id",
                     description = "The ID of the user to retrieve",

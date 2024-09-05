@@ -24,12 +24,8 @@ public class UserEntityMapper {
 
     // To Entity
 
-    public static UserEntity toUserEntity(UserApplicationDTO userApplicationDTO) {
-        return new UserEntity(userApplicationDTO.name(), userApplicationDTO.email(), userApplicationDTO.password());
-    }
-
-    public static Mono<UserEntity> toUserEntityMono(Mono<UserApplicationDTO> userAppMono) {
-        return userAppMono.map(userApplicationDTO -> new UserEntity(userApplicationDTO.name(), userApplicationDTO.email(), userApplicationDTO.password()));
+    public static UserEntity toUserEntity(UserApplicationDTO userApp) {
+        return new UserEntity(userApp.name(), userApp.username(), userApp.email(), userApp.password());
     }
 
 }

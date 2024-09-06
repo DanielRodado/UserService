@@ -35,6 +35,11 @@ public class UserEntityServiceImpl implements UserEntityService {
     }
 
     @Override
+    public Mono<UserEntity> getUserByUsername(String username) {
+        return userEntityRepository.findByUsername(username);
+    }
+
+    @Override
     public Flux<UserEntity> findAllUsers() {
         return userEntityRepository.findAll();
     }

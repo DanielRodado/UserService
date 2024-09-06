@@ -12,6 +12,8 @@ public interface UserEntityService {
 
     Mono<UserEntity> getUserById(Long id);
 
+    Mono<UserEntity> getUserByUsername(String username);
+
     Flux<UserEntity> findAllUsers();
 
     Mono<UserEntity> saveUser(UserEntity userEntity);

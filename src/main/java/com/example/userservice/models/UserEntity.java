@@ -13,12 +13,7 @@ public class UserEntity {
 
     boolean isAdmin;
 
-    public UserEntity(String name, String username, String email, String password, boolean isAdmin) {
-        this.name = name;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.isAdmin = isAdmin;
+    public UserEntity() {
     }
 
     public UserEntity(String name, String username, String email, String password) {
@@ -26,6 +21,14 @@ public class UserEntity {
         this.username = username;
         this.email = email;
         this.password = password;
+    }
+
+    public UserEntity(String name, String username, String email, String password, boolean isAdmin) {
+        this.name = name;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.isAdmin = isAdmin;
     }
 
     public Long getId() {

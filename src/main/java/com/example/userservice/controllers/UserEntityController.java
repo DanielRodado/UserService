@@ -65,50 +65,6 @@ public class UserEntityController {
     }
 
     @Operation(
-            summary = "Create a new user",
-            description = "Create a new user with the provided details.",
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "The data to create a new user.",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = UserEntityDTO.class),
-                            examples =  @ExampleObject(
-                                    name = "User create example",
-                                    summary = "User create details",
-                                    description = "Example data for create a new user.",
-                                    value = "{ \"name\": \"John\", \"email\": \"john@example.com\", \"password\": \"1234567890\"}"
-                            )
-                    )
-            )
-    )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "201",
-                    description = "User successfully created",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = UserEntityDTO.class),
-                            examples = @ExampleObject(
-                                    name = "User Created Example",
-                                    summary = "Created user",
-                                    description = "Example of the response when a new user is successfully created.",
-                                    value = "{ \"id\": \"1\", \"name\": \"John\", \"email\": \"john@example.com\"}"
-                            )
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "403",
-                    description = "Invalid input data",
-                    content = @Content(schema = @Schema(hidden = true))
-            )
-    })
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Mono<UserEntityDTO> createUser(@RequestBody Mono<UserApplicationDTO> userAppMono) {
-        return userEntityService.createUser(userAppMono);
-    }
-
-    @Operation(
             summary = "Update an existing user",
             description = "Updates the user identified by the given item ID with the data provided.",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(

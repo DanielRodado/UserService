@@ -16,6 +16,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import static com.example.userservice.utils.AuthUtil.getFirstAuthority;
+
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -37,7 +39,7 @@ public class AuthServiceImpl implements AuthService {
     public Mono<ResponseEntity<String>> login(LoginUser loginUser) {
         return generateCurrentUser(loginUser)
                 .flatMap(this::getUserDetails)
-                .flatMap(userDetails -> generateJwtToken(userDetails.getUsername()))
+                .flatMap(userDetails -> generateJwtToken(userDetails.getUsername(), getFirstAuthority(userDetails)))
                 .map(token -> ResponseEntity.ok().body(token))
                 .onErrorResume(err -> Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()));
     }
@@ -58,8 +60,8 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public Mono<String> generateJwtToken(String username) {
-        return Mono.just(jwtUtils.generateToken(username));
+    public Mono<String> generateJwtToken(String username, String rol) {
+        return Mono.just(jwtUtils.generateToken(username, rol));
     }
 
 

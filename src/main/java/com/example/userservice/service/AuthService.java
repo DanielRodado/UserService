@@ -21,6 +21,6 @@ public interface AuthService {
 
     Mono<UserDetails> getUserDetails(Authentication authentication);
 
-    Mono<String> generateJwtToken(String username);
+    Mono<String> generateJwtToken(String username, String rol);
 
 }

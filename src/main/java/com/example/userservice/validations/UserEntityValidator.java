@@ -18,6 +18,7 @@ public class UserEntityValidator implements Validator {
         UserApplicationDTO userApp = (UserApplicationDTO) target;
 
         isValidName(userApp.name(), errors);
+        isValidUserName(userApp.username(), errors);
         isValidEmail(userApp.email(), errors);
         isValidPassword(userApp.password(), errors);
     }
@@ -25,6 +26,12 @@ public class UserEntityValidator implements Validator {
     public void isValidName(String name, Errors errors) {
         if (name == null || name.isBlank()) {
             errors.rejectValue("name", "user.name.empty", "User name cannot be empty.");
+        }
+    }
+
+    public void isValidUserName(String username, Errors errors) {
+        if (username == null || username.isBlank()) {
+            errors.rejectValue("username", "user.username.empty", "Username cannot be empty.");
         }
     }
 

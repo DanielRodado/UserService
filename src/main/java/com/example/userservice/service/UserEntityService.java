@@ -22,6 +22,8 @@ public interface UserEntityService {
 
     Mono<UserEntityDTO> getUserDTOById(Long id);
 
+    Mono<UserEntityDTO> getUserDTOByUsername(String username);
+
     Flux<UserEntityDTO> findAllUsersDTO();
 
     // Methods Controller

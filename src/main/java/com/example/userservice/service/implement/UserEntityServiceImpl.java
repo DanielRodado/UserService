@@ -61,6 +61,11 @@ public class UserEntityServiceImpl implements UserEntityService {
     }
 
     @Override
+    public Mono<UserEntityDTO> getUserDTOByUsername(String username) {
+        return toUserEntityDTOMono(getUserByUsername(username));
+    }
+
+    @Override
     public Flux<UserEntityDTO> findAllUsersDTO() {
         return toUserEntityDTOFlux(findAllUsers());
     }

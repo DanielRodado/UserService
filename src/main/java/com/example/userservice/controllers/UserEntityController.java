@@ -15,8 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import static com.example.userservice.utils.HeaderUtil.extractUsername;
 
 @RestController
 @RequestMapping("/api/users")
@@ -141,6 +144,14 @@ public class UserEntityController {
     @DeleteMapping("/{id}")
     public Mono<ResponseEntity<String>> deleteUser(@PathVariable Long id) {
         return userEntityService.deleteUserById(id).then(Mono.just(ResponseEntity.noContent().build()));
+    }
+
+    // Current User
+
+    @GetMapping("/current")
+    public Mono<UserEntityDTO> getCurrentUser(ServerWebExchange serverWebExchange) {
+        String username = extractUsername(serverWebExchange);
+        return userEntityService.getUserDTOByUsername(username);
     }
 
 }

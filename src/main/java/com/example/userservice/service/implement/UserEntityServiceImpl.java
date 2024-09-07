@@ -10,6 +10,7 @@ import com.example.userservice.repositories.UserEntityRepository;
 import com.example.userservice.service.UserEntityService;
 import com.example.userservice.validations.UserEntityValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
@@ -26,6 +27,9 @@ public class UserEntityServiceImpl implements UserEntityService {
 
     @Autowired
     private UserEntityValidator userEntityValidator;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     // Methods Repository
 
@@ -67,7 +71,10 @@ public class UserEntityServiceImpl implements UserEntityService {
     public Mono<UserEntityDTO> createUser(Mono<UserApplicationDTO> userAppMono) {
         return userAppMono
                 .flatMap(this::validate)
-                .flatMap(userApplicationDTO -> saveUser(toUserEntity(userApplicationDTO)))
+                .flatMap(userApp -> {
+                    UserEntity userEntity = new UserEntity(userApp.name(), userApp.username(), userApp.email(), passwordEncoder.encode(userApp.password()));
+                    return saveUser(userEntity);
+                })
                 .map(UserEntityMapper::toUserEntityDTO);
     }
 

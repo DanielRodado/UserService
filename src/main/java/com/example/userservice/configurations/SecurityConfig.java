@@ -21,7 +21,6 @@ public class SecurityConfig {
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(authorizeExchangeSpec -> {
                     authorizeExchangeSpec
-                            .pathMatchers("/api/auth/**").permitAll()
                             .anyExchange().permitAll();
                 })
                 .formLogin(ServerHttpSecurity.FormLoginSpec::disable)

@@ -17,7 +17,7 @@ import reactor.core.publisher.Mono;
 import static com.example.userservice.utils.HeaderUtil.extractUsername;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/users/current")
 @Tag(name = "User Operations", description = "Operations related to user management.")
 public class UserEntityController {
 
@@ -41,7 +41,7 @@ public class UserEntityController {
                     content = @Content(schema = @Schema(hidden = true))
             )
     })
-    @GetMapping("/current")
+    @GetMapping
     public Mono<UserEntityDTO> getCurrentUser(ServerWebExchange serverWebExchange) {
         String username = extractUsername(serverWebExchange);
         return userEntityService.getUserDTOByUsername(username);

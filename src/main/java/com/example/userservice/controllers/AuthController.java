@@ -1,10 +1,9 @@
 package com.example.userservice.controllers;
 
-import com.example.userservice.configurations.JwtUtils;
 import com.example.userservice.dto.LoginUser;
 import com.example.userservice.dto.UserApplicationDTO;
 import com.example.userservice.dto.UserEntityDTO;
-import com.example.userservice.service.UserEntityService;
+import com.example.userservice.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -14,7 +13,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -25,13 +23,7 @@ import reactor.core.publisher.Mono;
 public class AuthController {
 
     @Autowired
-    private ReactiveAuthenticationManager authenticationManager;
-
-    @Autowired
-    private JwtUtils jwtUtils;
-
-    @Autowired
-    private UserEntityService userEntityService;
+    private AuthService authService;
 
     @Operation(
             summary = "Authenticate user and generate JWT.",
@@ -73,14 +65,7 @@ public class AuthController {
     })
     @PostMapping("/login")
     private Mono<ResponseEntity<String>> login(@RequestBody LoginUser loginUser) {
-        return authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginUser.username(), loginUser.password()))
-                .map(authentication -> {
-                    UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-                    String token = jwtUtils.generateToken(userDetails.getUsername());
-                    return ResponseEntity.ok().body(token);
-                })
-                .onErrorResume(err -> Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()));
+        return authService.login(loginUser);
     }
 
     @Operation(
@@ -124,7 +109,7 @@ public class AuthController {
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<UserEntityDTO> createUser(@RequestBody Mono<UserApplicationDTO> userAppMono) {
-        return userEntityService.createUser(userAppMono);
+        return authService.createUser(userAppMono);
     }
 
 }

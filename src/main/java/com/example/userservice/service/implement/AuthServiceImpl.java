@@ -35,7 +35,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public Mono<ResponseEntity<String>> login(LoginUser loginUser) {
-        return getCurrentUser(loginUser)
+        return generateCurrentUser(loginUser)
                 .flatMap(this::getUserDetails)
                 .flatMap(userDetails -> generateJwtToken(userDetails.getUsername()))
                 .map(token -> ResponseEntity.ok().body(token))
@@ -43,7 +43,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public Mono<Authentication> getCurrentUser(LoginUser loginUser) {
+    public Mono<Authentication> generateCurrentUser(LoginUser loginUser) {
         return authenticationManager.authenticate(authenticateUser(loginUser));
     }
 

@@ -15,7 +15,7 @@ public interface AuthService {
 
     Mono<ResponseEntity<String>> login(LoginUser loginUser);
 
-    Mono<Authentication> getCurrentUser(LoginUser loginUser);
+    Mono<Authentication> generateCurrentUser(LoginUser loginUser);
 
     UsernamePasswordAuthenticationToken authenticateUser(LoginUser loginUser);
 

@@ -22,6 +22,7 @@ El **UserService** implementa la arquitectura reactiva utilizando **Spring WebFl
 - **Spring Boot 3.x**
 - **Spring Reactive Web**: Módulo de Spring que permite la programación reactiva para manejar solicitudes y respuestas de manera no bloqueante.
 - **Spring Data R2DBC**: Proporciona soporte para el acceso a bases de datos reactivas en tiempo real usando R2DBC.
+- **Spring Cloud Netflix Eureka Client**: Proporciona el soporte necesario para que un microservicio se registre y descubra otros servicios en un servidor Eureka.
 - **PostgreSQL**: Sistema de gestión de bases de datos relacional usado para almacenar los datos de los usuarios.
 - **Spring Security**: Autenticación y autorización.
 - **JWT (JSON Web Tokens)**: Mecanismo para autenticar a los usuarios de manera segura.

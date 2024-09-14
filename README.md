@@ -114,7 +114,11 @@ El **UserService** expone los siguientes endpoints bajo el prefijo `/api/users`:
 
 ## Seguridad
 
-Este microservicio está protegido por **Spring Security**, utilizando JWT para autenticar y autorizar a los usuarios. Cada solicitud debe incluir un token JWT válido en el encabezado `Authorization` en el formato `Bearer <token>`.
+El `UserService` implementa **Spring Security** para manejar la autenticación de los usuarios. Este microservicio .
+
+Aunque la autenticación se gestiona dentro del `UserService`, los filtros de seguridad y otras políticas de seguridad más amplias, como el enrutamiento y la autorización, están centralizados en el **[Gateway Service](https://github.com/DanielRodado/GatewayService-ToDoList)** que utiliza **JWT** para autenticar a los usuarios. Cada solicitud al `GatewayService` debe incluir un token JWT válido en el encabezado `Authorization` en el formato `Bearer <token>`. El Gateway es responsable de aplicar estas políticas de seguridad antes de dirigir las solicitudes al `UserService`.
+
+Para más detalles sobre la implementación de la autenticación en el `UserService`, consulta la configuración de seguridad en el archivo `SecurityConfig` dentro del microservicio.
 
 - **Roles disponibles**: `USER`, `ADMIN`
 - **Rutas protegidas**: Solo los usuarios con el rol `ADMIN` pueden realizar operaciones como: Obtener, eliminar o actualizar datos de otros usuarios.
